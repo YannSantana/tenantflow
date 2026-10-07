@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: tenantflow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: local-owner-only
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - database:/var/lib/postgresql/data
+      - ./database/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tenantflow"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://tenantflow:local-demo-only@db:5432/tenantflow
+      JWT_SECRET: ${JWT_SECRET:?Gere o JWT_SECRET no arquivo .env}
+      METRICS_TOKEN: ${METRICS_TOKEN:?Gere o METRICS_TOKEN no arquivo .env}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - 'printf "%s" "$$METRICS_TOKEN" > /tmp/metrics_token; exec /bin/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus'
+    environment:
+      METRICS_TOKEN: ${METRICS_TOKEN:?Gere o METRICS_TOKEN no arquivo .env}
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus:/prometheus
+    depends_on:
+      api:
+        condition: service_healthy
+  grafana:
+    image: grafana/grafana:11.6.0
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: local-grafana-only
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+volumes:
+  database:
+  prometheus:
+  grafana:

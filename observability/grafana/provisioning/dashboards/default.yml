@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: TenantFlow
+    folder: TenantFlow
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards
