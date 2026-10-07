@@ -1,0 +1,107 @@
+1
+00:00:00,400 --> 00:00:05,724
+O TenantFlow é uma API para organizar projetos e tarefas.
+
+2
+00:00:05,724 --> 00:00:12,636
+Várias empresas usam o mesmo serviço, mas cada uma tem seu próprio espaço.
+
+3
+00:00:12,636 --> 00:00:18,800
+Vamos acompanhar a Aurora e a Horizonte para ver isso funcionando.
+
+4
+00:00:20,000 --> 00:00:23,743
+Primeiro, cadastramos as duas empresas.
+
+5
+00:00:23,743 --> 00:00:29,981
+A API cria o primeiro administrador e devolve um token de acesso.
+
+6
+00:00:29,981 --> 00:00:37,850
+Esse token identifica o usuário e a empresa, e será enviado nas próximas chamadas.
+
+7
+00:00:39,050 --> 00:00:49,036
+Com o token da Aurora, criamos o projeto Novo site da Aurora e adicionamos a tarefa Revisar os textos.
+
+8
+00:00:49,036 --> 00:00:52,169
+A API confirma as duas criações.
+
+9
+00:00:52,169 --> 00:00:57,750
+Quando a Aurora consulta o projeto, recebe os seus dados.
+
+10
+00:00:58,950 --> 00:01:01,621
+Agora vem o teste principal.
+
+11
+00:01:01,621 --> 00:01:08,108
+A Horizonte tenta consultar exatamente o projeto criado pela Aurora.
+
+12
+00:01:08,108 --> 00:01:15,834
+A resposta é quatrocentos e quatro: o recurso não foi encontrado na empresa dela.
+
+13
+00:01:15,834 --> 00:01:19,650
+A Aurora continua acessando normalmente.
+
+14
+00:01:20,850 --> 00:01:28,084
+Por trás dessa resposta, a API confere o token e define a empresa do pedido.
+
+15
+00:01:28,084 --> 00:01:32,082
+A aplicação filtra os dados dessa empresa.
+
+16
+00:01:32,082 --> 00:01:41,600
+O PostgreSQL também aplica políticas de segurança por linha, reforçando a separação dentro do banco.
+
+17
+00:01:42,800 --> 00:01:48,155
+No plano Free, a Aurora pode ter até três projetos.
+
+18
+00:01:48,155 --> 00:01:54,245
+Ao tentar criar o quarto, a API recusa e explica o limite.
+
+19
+00:01:54,245 --> 00:02:00,125
+O administrador muda para o plano Pro e repete o pedido.
+
+20
+00:02:00,125 --> 00:02:03,590
+Agora, o quarto projeto é criado.
+
+21
+00:02:03,590 --> 00:02:05,900
+A cobrança é simulada.
+
+22
+00:02:07,100 --> 00:02:13,384
+A empresa pode consultar o plano e seu consumo na rota de assinatura.
+
+23
+00:02:13,384 --> 00:02:19,578
+Para acompanhar o serviço, a API fornece logs e métricas protegidas.
+
+24
+00:02:19,578 --> 00:02:29,050
+O projeto inclui configuração de Prometheus e Grafana para volume de pedidos, erros e tempo de resposta.
+
+25
+00:02:30,250 --> 00:02:39,442
+Para experimentar, baixe o projeto, gere a configuração local e inicie os serviços com Docker Compose.
+
+26
+00:02:39,442 --> 00:02:46,111
+Abra a documentação interativa, cadastre uma empresa e autorize seu token.
+
+27
+00:02:46,111 --> 00:02:52,600
+O roteiro de demonstração já faz o teste com as duas empresas para você.

@@ -6,6 +6,14 @@ Imagine duas equipes: a Aurora está preparando seu novo site; a Horizonte está
 
 O projeto foi pensado para portfólio: tem um domínio simples, decisões explicadas e testes que procuram quebrar as garantias de isolamento e de uso dos planos.
 
+## Veja a API funcionando
+
+Uma demonstração de **2min53s**, com narração em português e legendas. O vídeo explica o cadastro, a criação de projetos e tarefas, o isolamento entre duas empresas e a mudança de plano, usando resultados de chamadas reais à API.
+
+[![Assista à demonstração do TenantFlow](docs/videos/tenantflow-capa.png)](https://github.com/YannSantana/tenantflow/raw/refs/heads/main/docs/videos/tenantflow-como-funciona.mp4)
+
+[Assistir ou baixar o vídeo (MP4)](https://github.com/YannSantana/tenantflow/raw/refs/heads/main/docs/videos/tenantflow-como-funciona.mp4) · [Legendas (SRT)](docs/videos/tenantflow-legendas.srt)
+
 ## O que já funciona
 
 - Cadastro de empresa com seu primeiro administrador e login com token temporário.
